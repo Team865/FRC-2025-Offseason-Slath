@@ -9,5 +9,5 @@ public interface RollerIO {
         public double velocity;
     }
 
-    
+    default void setVoltage(double volts){}
 }
