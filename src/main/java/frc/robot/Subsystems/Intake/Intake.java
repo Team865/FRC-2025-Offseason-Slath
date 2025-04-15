@@ -4,6 +4,7 @@
 
 package frc.robot.Subsystems.Intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -17,5 +18,11 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+    }
+
+    public Command intake(){
+        return this.runOnce(() -> {
+            System.out.println("INTAKE COMMAND WAS CALLED");
+        }).until(() -> (false)); // Replace this with sensor logic once sensor io is completed
     }
 }
