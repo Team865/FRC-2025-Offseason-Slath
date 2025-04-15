@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private RollersIO io;
+    private RollersIO rollersIO;
+    private DetectionIO detectionIO;
 
     /** Creates a new Intake. */
-    public Intake(RollersIO io) {
-        this.io = io;
+    public Intake(RollersIO rollersIO, DetectionIO detectionIO) {
+        this.rollersIO = rollersIO;
+        this.detectionIO = detectionIO;
     }
 
     @Override
