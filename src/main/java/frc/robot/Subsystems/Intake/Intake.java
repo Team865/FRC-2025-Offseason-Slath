@@ -7,8 +7,12 @@ package frc.robot.Subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+  private RollersIO io;
+
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake(RollersIO io) {
+    this.io = io;
+  }
 
   @Override
   public void periodic() {

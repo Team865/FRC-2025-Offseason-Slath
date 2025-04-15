@@ -2,7 +2,7 @@ package frc.robot.Subsystems.Intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface RollerIO {
+public interface RollersIO {
     @AutoLog
     public class RollerInputs {
         public double volts;
