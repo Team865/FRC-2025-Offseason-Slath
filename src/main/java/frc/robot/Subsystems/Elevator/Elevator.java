@@ -7,11 +7,11 @@ package frc.robot.Subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
-  /** Creates a new Elevator. */
-  public Elevator() {}
+    /** Creates a new Elevator. */
+    public Elevator() {}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }
