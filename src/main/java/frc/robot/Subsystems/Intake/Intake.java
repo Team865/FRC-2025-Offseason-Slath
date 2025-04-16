@@ -6,6 +6,7 @@ package frc.robot.Subsystems.Intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -39,8 +40,22 @@ public class Intake extends SubsystemBase {
 
     public Command intake() {
         return this.runOnce(() -> {
-                    System.out.println("INTAKE COMMAND WAS CALLED");
+                    System.out.println("RUNNING ROLLERS (INTAKE)");
                 })
-                .until(() -> (false)); // Replace this with sensor logic once sensor io is completed
+                .until(() -> MathUtil.isNear(1, this.middleSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
+                .andThen(() -> {
+                    System.out.println("STOP RUNNING ROLLERS");
+                });
+    }
+
+    public Command outake() {
+        return this.runOnce(() -> {
+                    System.out.println("RUNNING ROLLERS (OUTAKE)");
+                })
+                .until(() -> MathUtil.isNear(1, this.bottomSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
+                .until(() -> !MathUtil.isNear(1, this.bottomSensorInputs.distance, 1)) // Wait until the sensor stops detecting the coral
+                .andThen(() -> {
+                    System.out.println("STOP RUNNING ROLLERS");
+                });
     }
 }
