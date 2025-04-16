@@ -4,10 +4,10 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface DetectionIO {
     @AutoLog
-    public class DetectionIOInputs {
-        public boolean connected;
-        public double distance;
-    };
+    public static class DetectionIOInputs {
+        public boolean connected = false;
+        public double distance = 0.0;
+    }
 
-    default public void updateInputs(DetectionIOInputs inputs){}
+    public default void updateInputs(DetectionIOInputs inputs) {}
 }
