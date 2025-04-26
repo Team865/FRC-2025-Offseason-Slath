@@ -4,11 +4,10 @@
 
 package frc.robot.Subsystems.Intake;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
     private final RollersIO rollersIO;
@@ -44,7 +43,8 @@ public class Intake extends SubsystemBase {
         return this.runOnce(() -> {
                     System.out.println("RUNNING ROLLERS (INTAKE)");
                 })
-                .until(() -> MathUtil.isNear(1, this.middleSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
+                .until(() -> MathUtil.isNear(
+                        1, this.middleSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
                 .andThen(() -> {
                     System.out.println("STOP RUNNING ROLLERS");
                 });
@@ -54,8 +54,10 @@ public class Intake extends SubsystemBase {
         return this.runOnce(() -> {
                     System.out.println("RUNNING ROLLERS (OUTAKE)");
                 })
-                .until(() -> MathUtil.isNear(1, this.bottomSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
-                .until(() -> !MathUtil.isNear(1, this.bottomSensorInputs.distance, 1)) // Wait until the sensor stops detecting the coral
+                .until(() -> MathUtil.isNear(
+                        1, this.bottomSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
+                .until(() -> !MathUtil.isNear(
+                        1, this.bottomSensorInputs.distance, 1)) // Wait until the sensor stops detecting the coral
                 .andThen(() -> {
                     System.out.println("STOP RUNNING ROLLERS");
                 });
