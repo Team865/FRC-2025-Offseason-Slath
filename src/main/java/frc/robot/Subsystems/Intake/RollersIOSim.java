@@ -6,8 +6,8 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class RollersIOSim implements RollersIO {
-    private DCMotorSim sim =
-            new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.004, 2), DCMotor.getKrakenX60(1));
+    private DCMotorSim sim = new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.004, 2), DCMotor.getKrakenX60(1));
 
     private double appliedVolts = 0.0;
 
