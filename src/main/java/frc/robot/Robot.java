@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.Intake;
 import frc.robot.Subsystems.Intake.RollersIO;
+import frc.robot.Subsystems.Intake.RollersIOSim;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -70,7 +71,7 @@ public class Robot extends LoggedRobot {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(new NT4Publisher());
 
-                intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
+                intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIO() {}, new DetectionIO() {});
                 break;
 
             default:
@@ -87,7 +88,7 @@ public class Robot extends LoggedRobot {
         // Start AdvantageKit logger
         Logger.start();
 
-        driverController.a().onTrue(intakeSubsystem.intake());
+        driverController.a().whileTrue(intakeSubsystem.runRollers());
     }
 
     /** This function is called periodically during all modes. */
