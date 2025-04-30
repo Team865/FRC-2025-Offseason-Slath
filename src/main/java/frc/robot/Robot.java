@@ -13,6 +13,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Intake.DetectionIO;
+import frc.robot.Subsystems.Intake.Intake;
+import frc.robot.Subsystems.Intake.RollersIO;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -27,6 +33,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
+    private Command autonomousCommand;
+
+    private final Intake intakeSubsystem;
+    private final CommandXboxController driverController = new CommandXboxController(0);
+
     public Robot() {
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -52,29 +63,50 @@ public class Robot extends LoggedRobot {
                 // Running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
+                intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
                 break;
 
             case SIM:
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(new NT4Publisher());
+
+                intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
                 break;
 
+            default:
             case REPLAY:
                 // Replaying a log, set up replay source
                 setUseTiming(false); // Run as fast as possible
                 String logPath = LogFileUtil.findReplayLog();
                 Logger.setReplaySource(new WPILOGReader(logPath));
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+                intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
                 break;
         }
 
         // Start AdvantageKit logger
         Logger.start();
+
+        driverController.a().onTrue(intakeSubsystem.intake());
     }
 
     /** This function is called periodically during all modes. */
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        // Optionally switch the thread to high priority to improve loop
+        // timing (see the template project documentation for details)
+        // Threads.setCurrentThreadPriority(true, 99);
+
+        // Runs the Scheduler. This is responsible for polling buttons, adding
+        // newly-scheduled commands, running already-scheduled commands, removing
+        // finished or interrupted commands, and running subsystem periodic() methods.
+        // This must be called from the robot's periodic block in order for anything in
+        // the Command-based framework to work.
+        CommandScheduler.getInstance().run();
+
+        // Return to non-RT thread priority (do not modify the first argument)
+        // Threads.setCurrentThreadPriority(false, 10);
+    }
 
     /** This function is called once when the robot is disabled. */
     @Override
@@ -86,7 +118,12 @@ public class Robot extends LoggedRobot {
 
     /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
     @Override
-    public void autonomousInit() {}
+    public void autonomousInit() {
+        // schedule the autonomous command (example)
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
+    }
 
     /** This function is called periodically during autonomous. */
     @Override
@@ -94,7 +131,15 @@ public class Robot extends LoggedRobot {
 
     /** This function is called once when teleop is enabled. */
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
+    }
 
     /** This function is called periodically during operator control. */
     @Override
@@ -102,7 +147,10 @@ public class Robot extends LoggedRobot {
 
     /** This function is called once when test mode is enabled. */
     @Override
-    public void testInit() {}
+    public void testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
+    }
 
     /** This function is called periodically during test mode. */
     @Override
