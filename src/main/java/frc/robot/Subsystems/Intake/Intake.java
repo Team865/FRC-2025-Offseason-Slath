@@ -4,7 +4,6 @@
 
 package frc.robot.Subsystems.Intake;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -17,8 +16,7 @@ public class Intake extends SubsystemBase {
     public final RollersIOInputsAutoLogged rollersInputs = new RollersIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged middleSensorInputs = new DetectionIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged bottomSensorInputs = new DetectionIOInputsAutoLogged();
-
-    // TEST PULL REQUEST
+    private final double intakingVoltage = 6.0;
 
     /** Creates a new Intake. */
     public Intake(RollersIO rollersIO, DetectionIO middleSensorIO, DetectionIO bottomSensorIO) {
@@ -39,27 +37,45 @@ public class Intake extends SubsystemBase {
         Logger.processInputs("Intake/BottomSensors", bottomSensorInputs);
     }
 
+    public Command setRollers(double volts) {
+        return this.runOnce(() -> rollersIO.setVoltage(volts));
+    }
+
+    public Command setRollers() {
+        return this.setRollers(intakingVoltage);
+    }
+
+    public Command runRollers(double volts) {
+        return this.startEnd(() -> rollersIO.setVoltage(volts), () -> rollersIO.setVoltage(0.0));
+    }
+
+    public Command runRollers() {
+        return this.startEnd(() -> rollersIO.setVoltage(intakingVoltage), () -> rollersIO.setVoltage(0.0));
+    }
+
     public Command intake() {
         return this.runOnce(() -> {
-                    System.out.println("RUNNING ROLLERS (INTAKE)");
-                })
-                .until(() -> MathUtil.isNear(
-                        1, this.middleSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
-                .andThen(() -> {
-                    System.out.println("STOP RUNNING ROLLERS");
-                });
+            System.out.println("RUNNING ROLLERS (INTAKE)");
+            this.runRollers();
+        });
+        // // .until(() -> MathUtil.isNear(
+        // //         1, this.middleSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
+        // .andThen(() -> {
+        //     System.out.println("STOP RUNNING ROLLERS");
+        // });
     }
 
     public Command outake() {
         return this.runOnce(() -> {
-                    System.out.println("RUNNING ROLLERS (OUTAKE)");
-                })
-                .until(() -> MathUtil.isNear(
-                        1, this.bottomSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
-                .until(() -> !MathUtil.isNear(
-                        1, this.bottomSensorInputs.distance, 1)) // Wait until the sensor stops detecting the coral
-                .andThen(() -> {
-                    System.out.println("STOP RUNNING ROLLERS");
-                });
+            System.out.println("RUNNING ROLLERS (OUTAKE)");
+            this.runRollers(0.0);
+        });
+        // .until(() -> MathUtil.isNear(
+        //         1, this.bottomSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
+        // .until(() -> !MathUtil.isNear(
+        //         1, this.bottomSensorInputs.distance, 1)) // Wait until the sensor stops detecting the coral
+        // .andThen(() -> {
+        //     System.out.println("STOP RUNNING ROLLERS");
+        // });
     }
 }
