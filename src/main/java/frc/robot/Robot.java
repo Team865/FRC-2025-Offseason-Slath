@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.Intake;
 import frc.robot.Subsystems.Intake.RollersIO;
+import frc.robot.Subsystems.Intake.RollersIOReal;
 import frc.robot.Subsystems.Intake.RollersIOSim;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -64,7 +65,7 @@ public class Robot extends LoggedRobot {
                 // Running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
-                intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
+                intakeSubsystem = new Intake(new RollersIOReal(), new DetectionIO() {}, new DetectionIO() {});
                 break;
 
             case SIM:
