@@ -97,7 +97,7 @@ public class Intake extends SubsystemBase {
     private Command outakeSensorSimulation() {
         // Return no command if the robot isn't in sim
         if (!Robot.isSimulation()) return Commands.none();
-        
+
         return Commands.runOnce(() -> {
                     // Set distance to within the sensor threshold
                     middleSensorInputs.distanceMM = 0;
@@ -115,22 +115,16 @@ public class Intake extends SubsystemBase {
         return (
                 // Simulate the sensors if necessary
                 Robot.isSimulation() ? this.intakeSensorSimulation() : Commands.none()
-                // Intake logic
+                // Run rollers until both sensors detect the coral
                 )
                 .alongWith(this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting())));
     }
 
     public Command outake() {
-        return this.runOnce(() -> {
-            System.out.println("RUNNING ROLLERS (OUTAKE)");
-            this.runRollers(0.0);
-        });
-        // .until(() -> MathUtil.isNear(
-        //         1, this.bottomSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
-        // .until(() -> !MathUtil.isNear(
-        //         1, this.bottomSensorInputs.distance, 1)) // Wait until the sensor stops detecting the coral
-        // .andThen(() -> {
-        //     System.out.println("STOP RUNNING ROLLERS");
-        // });
+        return (
+            // Simulate sensors if necessary
+            Robot.isSimulation() ? this.outakeSensorSimulation() : Commands.none()
+            // Run rollers until the bottom sensor no longer detects the coral
+        ).alongWith(this.runRollers().until(bottomSensorIsDetecting().negate()));
     }
 }
