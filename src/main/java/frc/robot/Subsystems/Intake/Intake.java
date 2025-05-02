@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.Constants.Mode;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -99,7 +97,7 @@ public class Intake extends SubsystemBase {
     public Command intake() {
         return (
                 // Simulate the sensors if necessary
-                Constants.currentMode == Mode.SIM ? this.intakeSensorSimulation() : Commands.none()
+                Robot.isSimulation() ? this.intakeSensorSimulation() : Commands.none()
                 // Intake logic
                 )
                 .alongWith(this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting())));
