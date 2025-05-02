@@ -20,8 +20,8 @@ import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
 import frc.robot.Subsystems.Intake.Intake;
 import frc.robot.Subsystems.Intake.RollersIO;
-import frc.robot.Subsystems.Intake.RollersIOReal;
 import frc.robot.Subsystems.Intake.RollersIOSim;
+import frc.robot.Subsystems.Intake.RollersIOTalonFX;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -66,7 +66,7 @@ public class Robot extends LoggedRobot {
                 // Running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
-                intakeSubsystem = new Intake(new RollersIOReal(), new DetectionIO() {}, new DetectionIO() {});
+                intakeSubsystem = new Intake(new RollersIOTalonFX(), new DetectionIO() {}, new DetectionIO() {});
                 break;
 
             case SIM:

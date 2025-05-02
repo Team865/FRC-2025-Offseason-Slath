@@ -9,13 +9,13 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Voltage;
 
-public class RollersIOReal implements RollersIO {
+public class RollersIOTalonFX implements RollersIO {
     private final TalonFX motor = new TalonFX(ROLLERS_ID);
     private final StatusSignal<Voltage> appliedVolts = motor.getMotorVoltage();
 
     private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
-    public RollersIOReal() {
+    public RollersIOTalonFX() {
         var config = new TalonFXConfiguration();
 
         motor.getConfigurator().apply(config);
