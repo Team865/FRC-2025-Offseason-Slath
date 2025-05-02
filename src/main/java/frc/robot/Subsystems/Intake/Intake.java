@@ -94,6 +94,23 @@ public class Intake extends SubsystemBase {
                 });
     }
 
+    private Command outakeSensorSimulation() {
+        // Return no command if the robot isn't in sim
+        if (!Robot.isSimulation()) return Commands.none();
+        
+        return Commands.runOnce(() -> {
+                    // Set distance to within the sensor threshold
+                    middleSensorInputs.distanceMM = 0;
+                    bottomSensorInputs.distanceMM = 0;
+                })
+                .andThen(new WaitCommand(0.3))
+                .andThen(() -> {
+                    // Set distance to beyond the detection threshold
+                    middleSensorInputs.distanceMM = MIDDLE_SENSOR_MAX_DIST_MM + 1;
+                    bottomSensorInputs.distanceMM = BOTTOM_SENSOR_MAX_DIST_MM + 1;
+                });
+    }
+
     public Command intake() {
         return (
                 // Simulate the sensors if necessary
