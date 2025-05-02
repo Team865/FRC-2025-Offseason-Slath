@@ -54,15 +54,9 @@ public class Intake extends SubsystemBase {
     }
 
     public Command intake() {
-        return this.runOnce(() -> {
-            System.out.println("RUNNING ROLLERS (INTAKE)");
-            this.runRollers();
-        });
-        // // .until(() -> MathUtil.isNear(
-        // //         1, this.middleSensorInputs.distance, 1)) // Tolerance and expected values are placeholders
-        // .andThen(() -> {
-        //     System.out.println("STOP RUNNING ROLLERS");
-        // });
+        return this.runRollers()
+            .until(middleSensorIO.objectDetected
+            .and(bottomSensorIO.objectDetected));
     }
 
     public Command outake() {
