@@ -1,12 +1,13 @@
 package frc.robot.Subsystems.Intake;
 
+import static frc.robot.Subsystems.Intake.IntakeConstants.*;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Voltage;
-import static frc.robot.Subsystems.Intake.IntakeConstants.*;
 
 public class RollersIOReal implements RollersIO {
     private final TalonFX motor = new TalonFX(ROLLERS_ID);
