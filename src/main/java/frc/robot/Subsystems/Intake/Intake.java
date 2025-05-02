@@ -78,8 +78,27 @@ public class Intake extends SubsystemBase {
         return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_MAX_DIST_MM);
     }
 
+    private Command intakeSensorSimulation() {
+        return Commands.runOnce(() -> {
+                    // Set distance to beyond the detection threshold
+                    middleSensorInputs.distanceMM = MIDDLE_SENSOR_MAX_DIST_MM + 1;
+                    bottomSensorInputs.distanceMM = BOTTOM_SENSOR_MAX_DIST_MM + 1;
+                })
+                .andThen(new WaitCommand(0.5))
+                .andThen(() -> {
+                    // Set distance back to within the threshold
+                    middleSensorInputs.distanceMM = 0;
+                    bottomSensorInputs.distanceMM = 0;
+                });
+    }
+
     public Command intake() {
-        return this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting()));
+        return (
+                // Simulate the sensors if necessary
+                Constants.currentMode == Mode.SIM ? this.intakeSensorSimulation() : Commands.none()
+                // Intake logic
+                )
+                .alongWith(this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting())));
     }
 
     public Command outake() {
