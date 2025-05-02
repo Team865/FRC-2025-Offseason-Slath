@@ -4,8 +4,13 @@
 
 package frc.robot.Subsystems.Intake;
 
+import static frc.robot.Subsystems.Intake.IntakeConstants.*;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -37,6 +42,7 @@ public class Intake extends SubsystemBase {
         Logger.processInputs("Intake/BottomSensors", bottomSensorInputs);
     }
 
+    // General control commands
     public Command setRollers(double volts) {
         return this.runOnce(() -> rollersIO.setVoltage(volts));
     }
@@ -61,8 +67,17 @@ public class Intake extends SubsystemBase {
         return this.runRollers(intakingVoltage);
     }
 
+    // Logical methods
+    public Trigger middleSensorIsDetecting(){
+        return new Trigger(() -> middleSensorInputs.distanceMM <= MIDDLE_SENSOR_MAX_DIST_MM);
+    }
+
+    public Trigger bottomSensorIsDetecting(){
+        return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_MAX_DIST_MM);
+    }
+
     public Command intake() {
-        return this.runRollers().until(middleSensorIO.objectDetected.and(bottomSensorIO.objectDetected));
+        return this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting()));
     }
 
     public Command outake() {
