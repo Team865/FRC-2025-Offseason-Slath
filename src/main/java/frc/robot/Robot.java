@@ -97,6 +97,7 @@ public class Robot extends LoggedRobot {
 
         driverController.a().whileTrue(intakeSubsystem.runRollers());
         driverController.b().onTrue(intakeSubsystem.intake());
+        driverController.x().onTrue(intakeSubsystem.outake());
     }
 
     /** This function is called periodically during all modes. */
