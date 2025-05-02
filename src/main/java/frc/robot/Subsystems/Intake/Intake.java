@@ -54,9 +54,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command intake() {
-        return this.runRollers()
-            .until(middleSensorIO.objectDetected
-            .and(bottomSensorIO.objectDetected));
+        return this.runRollers().until(middleSensorIO.objectDetected.and(bottomSensorIO.objectDetected));
     }
 
     public Command outake() {
