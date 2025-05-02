@@ -46,7 +46,15 @@ public class Intake extends SubsystemBase {
     }
 
     public Command runRollers(double volts) {
-        return this.startEnd(() -> rollersIO.setVoltage(volts), () -> rollersIO.setVoltage(0.0));
+        return this.startEnd(
+                () -> {
+                    System.out.println("RUNNING ROLLERS");
+                    rollersIO.setVoltage(volts);
+                },
+                () -> {
+                    System.out.println("STOPPING ROLLERS");
+                    rollersIO.setVoltage(0.0);
+                });
     }
 
     public Command runRollers() {
