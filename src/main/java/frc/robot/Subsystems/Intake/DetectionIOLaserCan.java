@@ -14,7 +14,7 @@ public class DetectionIOLaserCan implements DetectionIO {
             sensor.setRangingMode(LaserCan.RangingMode.SHORT);
             sensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
             sensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
-        } catch (ConfigurationFailedException e){
+        } catch (ConfigurationFailedException e) {
             System.out.println("LaserCan configuration failed. " + e);
         }
     }
@@ -24,10 +24,10 @@ public class DetectionIOLaserCan implements DetectionIO {
         Measurement measurement = sensor.getMeasurement();
 
         // Guard clauses
-        if(measurement == null){
+        if (measurement == null) {
             System.out.println("Measurement could not be found.");
             return;
-        } else if(measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
+        } else if (measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
             System.out.println("Could not get a valid measurement");
             return;
         }
