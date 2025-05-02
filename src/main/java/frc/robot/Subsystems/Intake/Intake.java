@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command runRollers() {
-        return this.startEnd(() -> rollersIO.setVoltage(intakingVoltage), () -> rollersIO.setVoltage(0.0));
+        return this.runRollers(intakingVoltage);
     }
 
     public Command intake() {
