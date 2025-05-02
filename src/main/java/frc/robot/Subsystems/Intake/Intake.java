@@ -79,7 +79,7 @@ public class Intake extends SubsystemBase {
 
     private Command intakeSensorSimulation() {
         // Return no command if the robot isn't in sim
-        if(!Robot.isSimulation()) return Commands.none();
+        if (!Robot.isSimulation()) return Commands.none();
 
         return Commands.runOnce(() -> {
                     // Set distance to beyond the detection threshold
