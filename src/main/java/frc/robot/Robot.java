@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Intake.DetectionIO;
+import frc.robot.Subsystems.Intake.DetectionIOLaserCan;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
 import frc.robot.Subsystems.Intake.Intake;
+import frc.robot.Subsystems.Intake.IntakeConstants;
 import frc.robot.Subsystems.Intake.RollersIO;
 import frc.robot.Subsystems.Intake.RollersIOSim;
 import frc.robot.Subsystems.Intake.RollersIOTalonFX;
@@ -66,7 +68,10 @@ public class Robot extends LoggedRobot {
                 // Running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
                 Logger.addDataReceiver(new NT4Publisher());
-                intakeSubsystem = new Intake(new RollersIOTalonFX(), new DetectionIO() {}, new DetectionIO() {});
+                intakeSubsystem = new Intake(
+                        new RollersIOTalonFX(),
+                        new DetectionIOLaserCan(IntakeConstants.MIDDLE_SENSOR_ID),
+                        new DetectionIOLaserCan(IntakeConstants.BOTTOM_SENSOR_ID));
                 break;
 
             case SIM:
