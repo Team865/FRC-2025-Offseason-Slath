@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Constants.Mode;
 import org.littletonrobotics.junction.Logger;
 
@@ -79,6 +80,9 @@ public class Intake extends SubsystemBase {
     }
 
     private Command intakeSensorSimulation() {
+        // Return no command if the robot isn't in sim
+        if(!Robot.isSimulation()) return Commands.none();
+
         return Commands.runOnce(() -> {
                     // Set distance to beyond the detection threshold
                     middleSensorInputs.distanceMM = MIDDLE_SENSOR_MAX_DIST_MM + 1;
