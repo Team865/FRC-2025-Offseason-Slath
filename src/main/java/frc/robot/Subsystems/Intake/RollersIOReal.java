@@ -6,9 +6,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Voltage;
+import static frc.robot.Subsystems.Intake.IntakeConstants.*;
 
 public class RollersIOReal implements RollersIO {
-    private final TalonFX motor = new TalonFX(2);
+    private final TalonFX motor = new TalonFX(ROLLERS_ID);
     private final StatusSignal<Voltage> appliedVolts = motor.getMotorVoltage();
 
     private final VoltageOut voltageRequest = new VoltageOut(0.0);
