@@ -50,14 +50,27 @@ public class Intake extends SubsystemBase {
     }
 
     // General control commands
+    /** A command that sets rollers' voltage to a specific voltage level 
+     * @param   volts   The voltage value to apply (should range between -12.0 and 12.0)
+     * @return          The command that sets the roller voltage
+    */
     public Command setRollers(double volts) {
         return this.runOnce(() -> rollersIO.setVoltage(volts));
     }
 
+    /** Calls {@link #setRollers(double volts)} at a default voltage
+     * @see #setRollers(double volts) 
+     * @return The Command from {@link #setRollers(double volts)} 
+     * */
     public Command setRollers() {
         return this.setRollers(intakingVoltage);
     }
 
+    /** A command that sets the rollers' voltage to a specific voltage level, 
+     * and stops the rollers when the command is interrupted
+     * @param   volts   The voltage value to apply (should range between -12.0 and 12.0)
+     * @return          The associated command
+     * */
     public Command runRollers(double volts) {
         return this.startEnd(
                 () -> {
@@ -70,6 +83,10 @@ public class Intake extends SubsystemBase {
                 });
     }
 
+    /** Calls {@link #runRollers(double volts)} at a default voltage
+     * @see #runRollers(double volts) 
+     * @return The Command from {@link #runRollers(double volts)} 
+     * */
     public Command runRollers() {
         return this.runRollers(intakingVoltage);
     }
@@ -83,9 +100,16 @@ public class Intake extends SubsystemBase {
         return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
+    /** Simulates middle and bottom sensors for SIM mode intake. 
+     * The returned Command should be ran using the alongWith() decorator to run in parallel to the logic code.
+     * @return The Command that executes the simulation
+     * @see #outakeSensorSimulation()
+    */
     private Command intakeSensorSimulation() {
         // Return no command if the robot isn't in sim
         if (!Robot.isSimulation()) return Commands.none();
+
+        setRollers(intakingVoltage);
 
         return Commands.runOnce(() -> {
                     // Set distance to beyond the detection threshold
@@ -100,6 +124,11 @@ public class Intake extends SubsystemBase {
                 });
     }
 
+    /** Simulates middle and bottom sensors for SIM mode outake. 
+     * The returned Command should be ran using the alongWith() decorator to run in parallel to the logic code.
+     * @return The Command that executes the simulation
+     * @see #intakeSensorSimulation()
+    */
     private Command outakeSensorSimulation() {
         // Return no command if the robot isn't in sim
         if (!Robot.isSimulation()) return Commands.none();
@@ -117,6 +146,11 @@ public class Intake extends SubsystemBase {
                 });
     }
 
+    /** The intake command for the robot
+     * @return The Command for the intake
+     * @see #outakeBottom()
+     * @see #outakeTop()
+     */
     public Command intake() {
         return (
                 // Simulate the sensors if necessary
@@ -126,7 +160,12 @@ public class Intake extends SubsystemBase {
                 .alongWith(this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting())));
     }
 
-    /* Outake Command out the bottom (L2, L3, L4) */
+    /** Command to outake the coral out the bottom.
+     * Should be used for L2, L3, and L4
+     * @return The command for the outake
+     * @see #outakeTop()
+     * @see #intake()
+     */
     public Command outakeBottom() {
         return (
                 // Simulate sensors if necessary
@@ -136,7 +175,12 @@ public class Intake extends SubsystemBase {
                 .alongWith(this.runRollers().until(bottomSensorIsDetecting().negate()));
     }
 
-    /* Outake Command out the top (L1) */
+    /** Command to outake the coral out the top.
+     * Should be used for L1
+     * @return The command for the outake
+     * @see #outakeBottom()
+     * @see #intake()
+     */
     public Command outakeTop() {
         return (
                 // Simulate sensors if necessary
