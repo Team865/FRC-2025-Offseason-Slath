@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
 import frc.robot.util.LoggedTunableNumber;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -26,8 +25,10 @@ public class Intake extends SubsystemBase {
     private final DetectionIOInputsAutoLogged bottomSensorInputs = new DetectionIOInputsAutoLogged();
     private final double intakingVoltage = 6.0;
 
-    private final LoggedTunableNumber MIDDLE_SENSOR_THRESHOLD_TUNABLE = new LoggedTunableNumber("Intake/MiddleSensorThresholdMM", MIDDLE_SENSOR_MAX_DIST_MM);
-    private final LoggedTunableNumber BOTTOM_SENSOR_THRESHOLD_TUNABLE = new LoggedTunableNumber("Intake/BottomSensorThresholdMM", BOTTOM_SENSOR_MAX_DIST_MM);
+    private final LoggedTunableNumber MIDDLE_SENSOR_THRESHOLD_TUNABLE =
+            new LoggedTunableNumber("Intake/MiddleSensorThresholdMM", MIDDLE_SENSOR_MAX_DIST_MM);
+    private final LoggedTunableNumber BOTTOM_SENSOR_THRESHOLD_TUNABLE =
+            new LoggedTunableNumber("Intake/BottomSensorThresholdMM", BOTTOM_SENSOR_MAX_DIST_MM);
 
     /** Creates a new Intake. */
     public Intake(RollersIO rollersIO, DetectionIO middleSensorIO, DetectionIO bottomSensorIO) {
