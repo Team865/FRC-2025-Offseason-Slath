@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
-import org.littletonrobotics.frc2025.Constants;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 /**
