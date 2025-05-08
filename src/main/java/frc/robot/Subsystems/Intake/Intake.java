@@ -126,12 +126,23 @@ public class Intake extends SubsystemBase {
                 .alongWith(this.runRollers().until(middleSensorIsDetecting().and(bottomSensorIsDetecting())));
     }
 
-    public Command outake() {
+    /* Outake Command out the bottom (L2, L3, L4) */
+    public Command outakeBottom() {
         return (
                 // Simulate sensors if necessary
                 Robot.isSimulation() ? this.outakeSensorSimulation() : Commands.none()
                 // Run rollers until the bottom sensor no longer detects the coral
                 )
                 .alongWith(this.runRollers().until(bottomSensorIsDetecting().negate()));
+    }
+
+    /* Outake Command out the top (L1) */
+    public Command outakeTop() {
+        return (
+                // Simulate sensors if necessary
+                Robot.isSimulation() ? this.outakeSensorSimulation() : Commands.none()
+                // Run rollers in inverse until the middle sensor no longer detects the coral
+                )
+                .alongWith(this.runRollers(-intakingVoltage).until(bottomSensorIsDetecting().negate()));
     }
 }
