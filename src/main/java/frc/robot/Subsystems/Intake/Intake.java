@@ -30,7 +30,11 @@ public class Intake extends SubsystemBase {
     private final LoggedTunableNumber BOTTOM_SENSOR_THRESHOLD_TUNABLE =
             new LoggedTunableNumber("Intake/BottomSensorThresholdMM", BOTTOM_SENSOR_MAX_DIST_MM);
 
-    /** Creates a new Intake. */
+    /** Creates a new Intake subsystem. 
+     * @see #intake()
+     * @see #outakeBottom()
+     * @see #outakeTop()
+    */
     public Intake(RollersIO rollersIO, DetectionIO middleSensorIO, DetectionIO bottomSensorIO) {
         this.rollersIO = rollersIO;
         this.middleSensorIO = middleSensorIO;
