@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
+import frc.robot.util.LoggedTunableNumber;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -23,6 +25,9 @@ public class Intake extends SubsystemBase {
     private final DetectionIOInputsAutoLogged middleSensorInputs = new DetectionIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged bottomSensorInputs = new DetectionIOInputsAutoLogged();
     private final double intakingVoltage = 6.0;
+
+    private final LoggedTunableNumber MIDDLE_SENSOR_THRESHOLD_TUNABLE = new LoggedTunableNumber("Intake/MiddleSensorThresholdMM", MIDDLE_SENSOR_MAX_DIST_MM);
+    private final LoggedTunableNumber BOTTOM_SENSOR_THRESHOLD_TUNABLE = new LoggedTunableNumber("Intake/BottomSensorThresholdMM", BOTTOM_SENSOR_MAX_DIST_MM);
 
     /** Creates a new Intake. */
     public Intake(RollersIO rollersIO, DetectionIO middleSensorIO, DetectionIO bottomSensorIO) {
@@ -70,11 +75,11 @@ public class Intake extends SubsystemBase {
 
     // Logical methods
     public Trigger middleSensorIsDetecting() {
-        return new Trigger(() -> middleSensorInputs.distanceMM <= MIDDLE_SENSOR_MAX_DIST_MM);
+        return new Trigger(() -> middleSensorInputs.distanceMM <= MIDDLE_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
     public Trigger bottomSensorIsDetecting() {
-        return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_MAX_DIST_MM);
+        return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
     private Command intakeSensorSimulation() {
@@ -83,8 +88,8 @@ public class Intake extends SubsystemBase {
 
         return Commands.runOnce(() -> {
                     // Set distance to beyond the detection threshold
-                    middleSensorInputs.distanceMM = MIDDLE_SENSOR_MAX_DIST_MM + 1;
-                    bottomSensorInputs.distanceMM = BOTTOM_SENSOR_MAX_DIST_MM + 1;
+                    middleSensorInputs.distanceMM = (int) MIDDLE_SENSOR_THRESHOLD_TUNABLE.get() + 1;
+                    bottomSensorInputs.distanceMM = (int) BOTTOM_SENSOR_THRESHOLD_TUNABLE.get() + 1;
                 })
                 .andThen(new WaitCommand(0.5))
                 .andThen(() -> {
@@ -106,8 +111,8 @@ public class Intake extends SubsystemBase {
                 .andThen(new WaitCommand(0.3))
                 .andThen(() -> {
                     // Set distance to beyond the detection threshold
-                    middleSensorInputs.distanceMM = MIDDLE_SENSOR_MAX_DIST_MM + 1;
-                    bottomSensorInputs.distanceMM = BOTTOM_SENSOR_MAX_DIST_MM + 1;
+                    middleSensorInputs.distanceMM = (int) MIDDLE_SENSOR_THRESHOLD_TUNABLE.get() + 1;
+                    bottomSensorInputs.distanceMM = (int) BOTTOM_SENSOR_THRESHOLD_TUNABLE.get() + 1;
                 });
     }
 
