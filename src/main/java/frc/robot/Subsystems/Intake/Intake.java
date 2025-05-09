@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
 import frc.robot.util.LoggedTunableNumber;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -23,18 +24,18 @@ public class Intake extends SubsystemBase {
     public final RollersIOInputsAutoLogged rollersInputs = new RollersIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged middleSensorInputs = new DetectionIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged bottomSensorInputs = new DetectionIOInputsAutoLogged();
-    private final double intakingVoltage = 6.0;
+    private final double intakingVoltage = -6.0;
 
     private final LoggedTunableNumber MIDDLE_SENSOR_THRESHOLD_TUNABLE =
             new LoggedTunableNumber("Intake/MiddleSensorThresholdMM", MIDDLE_SENSOR_MAX_DIST_MM);
     private final LoggedTunableNumber BOTTOM_SENSOR_THRESHOLD_TUNABLE =
             new LoggedTunableNumber("Intake/BottomSensorThresholdMM", BOTTOM_SENSOR_MAX_DIST_MM);
 
-    /** Creates a new Intake subsystem. 
+    /** Creates a new Intake subsystem.
      * @see #intake()
      * @see #outakeBottom()
      * @see #outakeTop()
-    */
+     */
     public Intake(RollersIO rollersIO, DetectionIO middleSensorIO, DetectionIO bottomSensorIO) {
         this.rollersIO = rollersIO;
         this.middleSensorIO = middleSensorIO;
@@ -54,23 +55,23 @@ public class Intake extends SubsystemBase {
     }
 
     // General control commands
-    /** A command that sets rollers' voltage to a specific voltage level 
+    /** A command that sets rollers' voltage to a specific voltage level
      * @param   volts   The voltage value to apply (should range between -12.0 and 12.0)
      * @return          The command that sets the roller voltage
-    */
+     */
     public Command setRollers(double volts) {
         return this.runOnce(() -> rollersIO.setVoltage(volts));
     }
 
     /** Calls {@link #setRollers(double volts)} at a default voltage
-     * @see #setRollers(double volts) 
-     * @return The Command from {@link #setRollers(double volts)} 
+     * @see #setRollers(double volts)
+     * @return The Command from {@link #setRollers(double volts)}
      * */
     public Command setRollers() {
         return this.setRollers(intakingVoltage);
     }
 
-    /** A command that sets the rollers' voltage to a specific voltage level, 
+    /** A command that sets the rollers' voltage to a specific voltage level,
      * and stops the rollers when the command is interrupted
      * @param   volts   The voltage value to apply (should range between -12.0 and 12.0)
      * @return          The associated command
@@ -88,27 +89,29 @@ public class Intake extends SubsystemBase {
     }
 
     /** Calls {@link #runRollers(double volts)} at a default voltage
-     * @see #runRollers(double volts) 
-     * @return The Command from {@link #runRollers(double volts)} 
+     * @see #runRollers(double volts)
+     * @return The Command from {@link #runRollers(double volts)}
      * */
     public Command runRollers() {
         return this.runRollers(intakingVoltage);
     }
 
+    @AutoLogOutput
     // Logical methods
     public Trigger middleSensorIsDetecting() {
         return new Trigger(() -> middleSensorInputs.distanceMM <= MIDDLE_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
+    @AutoLogOutput
     public Trigger bottomSensorIsDetecting() {
         return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
-    /** Simulates middle and bottom sensors for SIM mode intake. 
+    /** Simulates middle and bottom sensors for SIM mode intake.
      * The returned Command should be ran using the alongWith() decorator to run in parallel to the logic code.
      * @return The Command that executes the simulation
      * @see #outakeSensorSimulation()
-    */
+     */
     private Command intakeSensorSimulation() {
         // Return no command if the robot isn't in sim
         if (!Robot.isSimulation()) return Commands.none();
@@ -128,11 +131,11 @@ public class Intake extends SubsystemBase {
                 });
     }
 
-    /** Simulates middle and bottom sensors for SIM mode outake. 
+    /** Simulates middle and bottom sensors for SIM mode outake.
      * The returned Command should be ran using the alongWith() decorator to run in parallel to the logic code.
      * @return The Command that executes the simulation
      * @see #intakeSensorSimulation()
-    */
+     */
     private Command outakeSensorSimulation() {
         // Return no command if the robot isn't in sim
         if (!Robot.isSimulation()) return Commands.none();
@@ -191,6 +194,7 @@ public class Intake extends SubsystemBase {
                 Robot.isSimulation() ? this.outakeSensorSimulation() : Commands.none()
                 // Run rollers in inverse until the middle sensor no longer detects the coral
                 )
-                .alongWith(this.runRollers(-intakingVoltage).until(bottomSensorIsDetecting().negate()));
+                .alongWith(this.runRollers(-intakingVoltage)
+                        .until(bottomSensorIsDetecting().negate()));
     }
 }
