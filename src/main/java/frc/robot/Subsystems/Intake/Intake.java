@@ -24,7 +24,6 @@ public class Intake extends SubsystemBase {
     public final RollersIOInputsAutoLogged rollersInputs = new RollersIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged middleSensorInputs = new DetectionIOInputsAutoLogged();
     private final DetectionIOInputsAutoLogged bottomSensorInputs = new DetectionIOInputsAutoLogged();
-    private final DetectionIOInputsAutoLogged combinedSensorInputs = new DetectionIOInputsAutoLogged();
     private final double intakingVoltage = -7.5;
 
     private final LoggedTunableNumber MIDDLE_SENSOR_THRESHOLD_TUNABLE =
@@ -51,12 +50,10 @@ public class Intake extends SubsystemBase {
         this.rollersIO.updateInputs(this.rollersInputs);
         this.middleSensorIO.updateInputs(this.middleSensorInputs);
         this.bottomSensorIO.updateInputs(this.bottomSensorInputs);
-        combinedSensorInputs.distanceMM = middleSensorInputs.distanceMM + bottomSensorInputs.distanceMM;
 
         Logger.processInputs("Intake/Rollers", rollersInputs);
         Logger.processInputs("Intake/MiddleSensors", middleSensorInputs);
         Logger.processInputs("Intake/BottomSensors", bottomSensorInputs);
-        Logger.processInputs("Intake/CombinedSensors", combinedSensorInputs);
     }
 
     // General control commands
@@ -107,8 +104,13 @@ public class Intake extends SubsystemBase {
         return new Trigger(() -> middleSensorInputs.distanceMM <= MIDDLE_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
+    public Trigger bothSensorsAreDetecting() {
+        return middleSensorIsDetecting().and(bottomSensorIsDetecting());
+    }
+
     public Trigger combinedSensorIsDetecting() {
-        return new Trigger(() -> combinedSensorInputs.distanceMM <= COMBINED_SENSOR_THRESHOLD_TUNABLE.get());
+        return new Trigger(() -> (middleSensorInputs.distanceMM + bottomSensorInputs.distanceMM)
+                <= COMBINED_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
     @AutoLogOutput
@@ -131,14 +133,12 @@ public class Intake extends SubsystemBase {
                     // Set distance to beyond the detection threshold
                     middleSensorInputs.distanceMM = (int) MIDDLE_SENSOR_THRESHOLD_TUNABLE.get() + 1;
                     bottomSensorInputs.distanceMM = (int) BOTTOM_SENSOR_THRESHOLD_TUNABLE.get() + 1;
-                    combinedSensorInputs.distanceMM = (int) COMBINED_SENSOR_THRESHOLD_TUNABLE.get() + 1;
                 })
                 .andThen(new WaitCommand(0.5))
                 .andThen(() -> {
                     // Set distance back to within the threshold
                     middleSensorInputs.distanceMM = 0;
                     bottomSensorInputs.distanceMM = 0;
-                    combinedSensorInputs.distanceMM = 0;
                 });
     }
 
@@ -175,7 +175,7 @@ public class Intake extends SubsystemBase {
                 Robot.isSimulation() ? this.intakeSensorSimulation() : Commands.none()
                 // Run rollers until both sensors detect the coral
                 )
-                .alongWith(this.runRollers().until(combinedSensorIsDetecting()));
+                .alongWith(this.runRollers().until(bothSensorsAreDetecting()));
     }
 
     /** Command to outake the coral out the bottom.
