@@ -6,7 +6,7 @@ public interface DetectionIO {
     @AutoLog
     public static class DetectionIOInputs {
         public boolean connected = false;
-        public double distance = 0.0;
+        public int distanceMM = 0;
     }
 
     public default void updateInputs(DetectionIOInputs inputs) {}
