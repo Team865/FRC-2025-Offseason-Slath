@@ -10,7 +10,8 @@ public class ElevatorIOSim implements ElevatorIO {
     private double appliedVolts = 0.0;
     private double goalInches = 0.0;
 
-    private ElevatorSim elevatorSim = new ElevatorSim(4.62, 0.07, DCMotor.getKrakenX60(2), Units.inchesToMeters(0), Units.inchesToMeters(29), true, 0);
+    private ElevatorSim elevatorSim = new ElevatorSim(
+            4.62, 0.07, DCMotor.getKrakenX60(2), Units.inchesToMeters(0), Units.inchesToMeters(29), true, 0);
 
     @Override
     public void setGoal(double goal) {
