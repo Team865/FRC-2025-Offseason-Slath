@@ -5,9 +5,13 @@
 package frc.robot.Subsystems.Elevator;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
 
 public class Elevator extends SubsystemBase {
     private ElevatorIO elevatorIO;
+
+    private ReefLevel targetReefLevel;
+    private ElevatorIOInputsAutoLogged elevatorInputs = new ElevatorIOInputsAutoLogged();
 
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO elevatorIO) {
