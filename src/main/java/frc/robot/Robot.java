@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Elevator.Elevator;
 import frc.robot.Subsystems.Elevator.ElevatorIO;
+import frc.robot.Subsystems.Elevator.ElevatorIOSim;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.DetectionIOLaserCan;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
@@ -86,7 +87,7 @@ public class Robot extends LoggedRobot {
                 Logger.addDataReceiver(new NT4Publisher());
 
                 intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIOSim(), new DetectionIOSim());
-                elevatorSubsystem = new Elevator(new ElevatorIO() {});
+                elevatorSubsystem = new Elevator(new ElevatorIOSim());
                 break;
 
             default:
