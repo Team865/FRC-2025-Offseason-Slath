@@ -4,10 +4,10 @@
 
 package frc.robot.Subsystems.Elevator;
 
-import org.littletonrobotics.junction.Logger;
-
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
+import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
     private ElevatorIO elevatorIO;
@@ -25,5 +25,15 @@ public class Elevator extends SubsystemBase {
         elevatorIO.updateInputs(elevatorInputs);
 
         Logger.processInputs("Elevator", elevatorInputs);
+    }
+
+    public Command setReefLevel(ReefLevel level) {
+        return this.runOnce(() -> this.targetReefLevel = level);
+    }
+
+    /** Extends elevator to target Reef Level, and retract back to 0 when stopped */
+    public Command runExtension() {
+        return this.startEnd(
+                () -> this.elevatorIO.setGoal(targetReefLevel.getDistanceInches()), () -> this.elevatorIO.setGoal(0));
     }
 }

@@ -14,5 +14,8 @@ public interface ElevatorIO {
 
     public default void setPID(int p, int i, int d) {}
 
-    public default void updateInputs(ElevatorIOInputs inputs){}
+    public default void setGoal(double goal) {}
+    ;
+
+    public default void updateInputs(ElevatorIOInputs inputs) {}
 }
