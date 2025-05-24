@@ -8,11 +8,12 @@ public final class ElevatorConstants {
         L4(28.5);
 
         private final double distanceInches;
-        private ReefLevel(double distanceInches){
+
+        private ReefLevel(double distanceInches) {
             this.distanceInches = distanceInches;
         }
 
-        public double getDistanceInches(){
+        public double getDistanceInches() {
             return this.distanceInches;
         }
     }

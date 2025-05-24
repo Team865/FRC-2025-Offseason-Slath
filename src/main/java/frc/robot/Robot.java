@@ -78,7 +78,7 @@ public class Robot extends LoggedRobot {
                         new DetectionIOLaserCan(IntakeConstants.MIDDLE_SENSOR_ID),
                         new DetectionIOLaserCan(IntakeConstants.BOTTOM_SENSOR_ID));
 
-                elevatorSubsystem = new Elevator(new ElevatorIO(){});
+                elevatorSubsystem = new Elevator(new ElevatorIO() {});
                 break;
 
             case SIM:
@@ -86,7 +86,7 @@ public class Robot extends LoggedRobot {
                 Logger.addDataReceiver(new NT4Publisher());
 
                 intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIOSim(), new DetectionIOSim());
-                elevatorSubsystem = new Elevator(new ElevatorIO(){});
+                elevatorSubsystem = new Elevator(new ElevatorIO() {});
                 break;
 
             default:
@@ -97,7 +97,7 @@ public class Robot extends LoggedRobot {
                 Logger.setReplaySource(new WPILOGReader(logPath));
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
-                elevatorSubsystem = new Elevator(new ElevatorIO(){});
+                elevatorSubsystem = new Elevator(new ElevatorIO() {});
                 break;
         }
 

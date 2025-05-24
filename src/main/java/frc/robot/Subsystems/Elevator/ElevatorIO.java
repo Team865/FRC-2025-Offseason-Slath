@@ -9,10 +9,10 @@ public interface ElevatorIO {
         public double currentAmps = 0.0;
         public double velocityRotPerSecond = 0.0;
         public double positionRot = 0.0;
-        public boolean connected = false;    
+        public boolean connected = false;
     }
 
-    public default void setPID(int p, int i, int d){
+    public default void setPID(int p, int i, int d) {
         // Do nothing
     }
 }
