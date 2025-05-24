@@ -25,6 +25,8 @@ public class Elevator extends SubsystemBase {
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO elevatorIO) {
         this.elevatorIO = elevatorIO;
+
+        elevatorIO.setPID(kP.get(), kI.get(), kD.get());
     }
 
     @Override
