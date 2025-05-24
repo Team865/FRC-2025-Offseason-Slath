@@ -17,4 +17,8 @@ public final class ElevatorConstants {
             return this.distanceInches;
         }
     }
+
+    public static record PIDGains(double kP, double kI, double kD){};
+
+    public static final PIDGains pidGains = new PIDGains(0, 0, 0);
 }

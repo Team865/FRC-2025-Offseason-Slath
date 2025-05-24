@@ -6,7 +6,9 @@ package frc.robot.Subsystems.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
+import static frc.robot.Subsystems.Elevator.ElevatorConstants.*;
+import frc.robot.util.LoggedTunableNumber;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -14,6 +16,11 @@ public class Elevator extends SubsystemBase {
 
     private ReefLevel targetReefLevel;
     private ElevatorIOInputsAutoLogged elevatorInputs = new ElevatorIOInputsAutoLogged();
+
+    // Control System Tuning
+    private final LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/Feedback/P", pidGains.kP());
+    private final LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/Feedback/I", pidGains.kI());
+    private final LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/Feedback/D", pidGains.kD());
 
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO elevatorIO) {
