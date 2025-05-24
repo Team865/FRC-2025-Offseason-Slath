@@ -4,6 +4,8 @@
 
 package frc.robot.Subsystems.Elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
 
@@ -20,6 +22,8 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+        elevatorIO.updateInputs(elevatorInputs);
+
+        Logger.processInputs("Elevator", elevatorInputs);
     }
 }
