@@ -7,8 +7,8 @@ public interface ElevatorIO {
     public static class ElevatorIOInputs {
         public double appliedVolts = 0.0;
         public double currentAmps = 0.0;
-        public double velocityRotPerSecond = 0.0;
-        public double positionRot = 0.0;
+        public double velocityInchesPerSecond = 0.0;
+        public double positionInches = 0.0;
         public boolean connected = false;
     }
 
