@@ -12,7 +12,7 @@ public interface ElevatorIO {
         public boolean connected = false;
     }
 
-    public default void setPID(int p, int i, int d) {
-        // Do nothing
-    }
+    public default void setPID(int p, int i, int d) {}
+
+    public default void updateInputs(ElevatorIOInputs inputs){}
 }
