@@ -42,6 +42,7 @@ public class Robot extends LoggedRobot {
 
     private final Intake intakeSubsystem;
     private final CommandXboxController driverController = new CommandXboxController(0);
+    private final CommandXboxController operatorController = new CommandXboxController(1);
 
     public Robot() {
         // Record metadata
