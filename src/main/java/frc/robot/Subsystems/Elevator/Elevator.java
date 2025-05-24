@@ -7,8 +7,12 @@ package frc.robot.Subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
+    private ElevatorIO elevatorIO;
+
     /** Creates a new Elevator. */
-    public Elevator() {}
+    public Elevator(ElevatorIO elevatorIO) {
+        this.elevatorIO = elevatorIO;
+    }
 
     @Override
     public void periodic() {
