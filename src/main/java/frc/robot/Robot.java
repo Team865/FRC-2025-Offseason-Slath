@@ -16,6 +16,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Elevator.Elevator;
+import frc.robot.Subsystems.Elevator.ElevatorIO;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.DetectionIOLaserCan;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
@@ -41,6 +43,8 @@ public class Robot extends LoggedRobot {
     private Command autonomousCommand;
 
     private final Intake intakeSubsystem;
+    private final Elevator elevatorSubsystem;
+
     private final CommandXboxController driverController = new CommandXboxController(0);
     private final CommandXboxController operatorController = new CommandXboxController(1);
 
@@ -73,13 +77,16 @@ public class Robot extends LoggedRobot {
                         new RollersIOTalonFX(),
                         new DetectionIOLaserCan(IntakeConstants.MIDDLE_SENSOR_ID),
                         new DetectionIOLaserCan(IntakeConstants.BOTTOM_SENSOR_ID));
+
+                elevatorSubsystem = new Elevator(new ElevatorIO(){});
                 break;
 
             case SIM:
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(new NT4Publisher());
 
-                intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIOSim() {}, new DetectionIOSim() {});
+                intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIOSim(), new DetectionIOSim());
+                elevatorSubsystem = new Elevator(new ElevatorIO(){});
                 break;
 
             default:
@@ -90,6 +97,7 @@ public class Robot extends LoggedRobot {
                 Logger.setReplaySource(new WPILOGReader(logPath));
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
+                elevatorSubsystem = new Elevator(new ElevatorIO(){});
                 break;
         }
 
