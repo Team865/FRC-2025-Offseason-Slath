@@ -4,11 +4,11 @@
 
 package frc.robot.Subsystems.Elevator;
 
+import static frc.robot.Subsystems.Elevator.ElevatorConstants.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Subsystems.Elevator.ElevatorConstants.*;
 import frc.robot.util.LoggedTunableNumber;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -32,11 +32,13 @@ public class Elevator extends SubsystemBase {
         elevatorIO.updateInputs(elevatorInputs);
 
         LoggedTunableNumber.ifChanged(
-            hashCode(), 
-            () -> {
-                elevatorIO.setPID(kP.get(), kI.get(), kD.get());
-            }, 
-            kP, kI, kD);
+                hashCode(),
+                () -> {
+                    elevatorIO.setPID(kP.get(), kI.get(), kD.get());
+                },
+                kP,
+                kI,
+                kD);
 
         Logger.processInputs("Elevator", elevatorInputs);
     }
