@@ -31,6 +31,13 @@ public class Elevator extends SubsystemBase {
     public void periodic() {
         elevatorIO.updateInputs(elevatorInputs);
 
+        LoggedTunableNumber.ifChanged(
+            hashCode(), 
+            () -> {
+                elevatorIO.setPID(kP.get(), kI.get(), kD.get());
+            }, 
+            kP, kI, kD);
+
         Logger.processInputs("Elevator", elevatorInputs);
     }
 
