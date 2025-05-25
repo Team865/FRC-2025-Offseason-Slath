@@ -2,7 +2,7 @@ package frc.robot.Subsystems.Elevator;
 
 public final class ElevatorConstants {
     public enum ReefLevel {
-        L1(0),
+        L1(0.5),
         L2(11.25),
         L3(18.875),
         L4(28.5);
