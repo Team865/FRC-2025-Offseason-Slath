@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 public class Elevator extends SubsystemBase {
     private ElevatorIO elevatorIO;
 
-    private ReefLevel targetReefLevel;
+    private ReefLevel targetReefLevel = ReefLevel.L1;
     private ElevatorIOInputsAutoLogged elevatorInputs = new ElevatorIOInputsAutoLogged();
 
     // Control System Tuning
