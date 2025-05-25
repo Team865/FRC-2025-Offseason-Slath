@@ -49,9 +49,13 @@ public class Elevator extends SubsystemBase {
         return this.runOnce(() -> this.targetReefLevel = level);
     }
 
-    /** Extends elevator to target Reef Level, and retract back to 0 when stopped */
-    public Command runExtension() {
-        return this.startEnd(
-                () -> this.elevatorIO.setGoal(targetReefLevel.getDistanceInches()), () -> this.elevatorIO.setGoal(0));
+    /** Extends elevator to target Reef Level */
+    public Command extend() {
+        return this.runOnce(() -> this.elevatorIO.setGoal(targetReefLevel.getDistanceInches()));
+    }
+
+    /** Retracts elevator to zero */
+    public Command retract() {
+        return this.runOnce(() -> this.elevatorIO.setGoal(0));
     }
 }
