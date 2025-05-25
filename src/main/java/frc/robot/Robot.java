@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Elevator.Elevator;
 import frc.robot.Subsystems.Elevator.ElevatorIO;
 import frc.robot.Subsystems.Elevator.ElevatorIOSim;
+import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.DetectionIOLaserCan;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
@@ -105,10 +106,17 @@ public class Robot extends LoggedRobot {
         // Start AdvantageKit logger
         Logger.start();
 
-        driverController.a().whileTrue(intakeSubsystem.runRollers());
-        driverController.b().onTrue(intakeSubsystem.intake());
+        driverController.y().onTrue(intakeSubsystem.intake());
         driverController.x().onTrue(intakeSubsystem.outakeBottom());
-        driverController.y().onTrue(intakeSubsystem.outakeTop());
+        driverController.b().onTrue(intakeSubsystem.outakeTop());
+
+        driverController.rightTrigger().onTrue(elevatorSubsystem.extend());
+        driverController.a().whileTrue(elevatorSubsystem.retract());
+
+        operatorController.a().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L1));
+        operatorController.b().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L2));
+        operatorController.x().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L3));
+        operatorController.y().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L4));
     }
 
     /** This function is called periodically during all modes. */
