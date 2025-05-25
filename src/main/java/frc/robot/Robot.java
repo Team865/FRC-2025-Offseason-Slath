@@ -111,7 +111,7 @@ public class Robot extends LoggedRobot {
         driverController.b().onTrue(intakeSubsystem.outakeTop());
 
         driverController.rightTrigger().onTrue(elevatorSubsystem.extend());
-        driverController.a().whileTrue(elevatorSubsystem.retract());
+        driverController.a().onTrue(elevatorSubsystem.retract());
 
         operatorController.a().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L1));
         operatorController.b().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L2));
