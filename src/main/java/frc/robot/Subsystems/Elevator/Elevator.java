@@ -18,14 +18,14 @@ public class Elevator extends SubsystemBase {
     private ElevatorIOInputsAutoLogged elevatorInputs = new ElevatorIOInputsAutoLogged();
 
     // Control System Tuning
-    private final LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/Feedback/P", pidGains.kP());
-    private final LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/Feedback/I", pidGains.kI());
-    private final LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/Feedback/D", pidGains.kD());
+    private final LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/Feedback/kP", pidGains.kP());
+    private final LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/Feedback/kI", pidGains.kI());
+    private final LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/Feedback/kD", pidGains.kD());
 
-    private final LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/Feedback/P", feedforwardGains.kS());
-    private final LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/Feedback/I", feedforwardGains.kG());
-    private final LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/Feedback/D", feedforwardGains.kV());
-    private final LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/Feedback/D", feedforwardGains.kA());
+    private final LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/Feedforward/kS", feedforwardGains.kS());
+    private final LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/Feedforward/kG", feedforwardGains.kG());
+    private final LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/Feedforward/kV", feedforwardGains.kV());
+    private final LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/Feedforward/kA", feedforwardGains.kA());
 
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO elevatorIO) {
