@@ -14,6 +14,7 @@ public interface ElevatorIO {
     }
 
     public default void setPID(double p, double i, double d) {}
+
     public default void setFeedforward(double s, double g, double v, double a) {}
 
     public default void setGoal(double goal) {}

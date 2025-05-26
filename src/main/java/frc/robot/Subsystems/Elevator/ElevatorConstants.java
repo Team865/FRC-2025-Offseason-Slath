@@ -19,7 +19,8 @@ public final class ElevatorConstants {
     }
 
     public static record PIDGains(double kP, double kI, double kD) {}
-    public static record FeedforwardGains(double kS, double kG , double kV, double kA) {}
+
+    public static record FeedforwardGains(double kS, double kG, double kV, double kA) {}
 
     public static final PIDGains pidGains = new PIDGains(2, 0.3, 0);
     public static final FeedforwardGains feedforwardGains = new FeedforwardGains(0, 0, 0, 0);
