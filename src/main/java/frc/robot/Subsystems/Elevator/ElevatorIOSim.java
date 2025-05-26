@@ -1,13 +1,15 @@
 package frc.robot.Subsystems.Elevator;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ElevatorIOSim implements ElevatorIO {
-    private final PIDController pidController = new PIDController(0, 0, 0);
+    private final ProfiledPIDController pidController =
+            new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(10, 5));
     private final ElevatorFeedforward feedforwardController = new ElevatorFeedforward(0, 0, 0, 0);
     private double appliedVolts = 0.0;
     private double goalInches = 0.0;
