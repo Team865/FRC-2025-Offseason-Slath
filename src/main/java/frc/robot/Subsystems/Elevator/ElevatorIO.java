@@ -9,6 +9,7 @@ public interface ElevatorIO {
         public double currentAmps = 0.0;
         public double velocityInchesPerSecond = 0.0;
         public double positionInches = 0.0;
+        public double setpointInches = 0.0;
         public boolean connected = false;
     }
 
