@@ -18,6 +18,12 @@ public final class ElevatorConstants {
         }
     }
 
+    public static final int MAIN_TALON_ID = 11;
+    public static final int FOLLOWER_TALON_ID = 12;
+    
+    public static final double DRUM_RADIUS_METERS = 0.048514 / 2;
+    public static final double GEAR_RATIO = 80 / 16;
+
     public static record PIDGains(double kP, double kI, double kD) {}
 
     public static record FeedforwardGains(double kS, double kG, double kV, double kA) {}
