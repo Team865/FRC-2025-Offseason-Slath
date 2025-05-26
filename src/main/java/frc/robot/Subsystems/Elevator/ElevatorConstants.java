@@ -21,5 +21,5 @@ public final class ElevatorConstants {
     public static record PIDGains(double kP, double kI, double kD) {}
     ;
 
-    public static final PIDGains pidGains = new PIDGains(0, 0, 0);
+    public static final PIDGains pidGains = new PIDGains(2, 0.3, 0);
 }
