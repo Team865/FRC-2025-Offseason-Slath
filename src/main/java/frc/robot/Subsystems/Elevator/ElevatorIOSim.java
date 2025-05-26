@@ -46,7 +46,8 @@ public class ElevatorIOSim implements ElevatorIO {
 
         inputs.setpointInches = goalInches;
         inputs.appliedVolts = appliedVolts;
-        inputs.currentAmps = elevatorSim.getCurrentDrawAmps();
+        inputs.supplyCurrent = elevatorSim.getCurrentDrawAmps();
+        inputs.statorCurrent = elevatorSim.getCurrentDrawAmps();
         inputs.positionInches = Units.metersToInches(elevatorSim.getPositionMeters());
         inputs.velocityInchesPerSecond = Units.metersToInches(elevatorSim.getVelocityMetersPerSecond());
     }
