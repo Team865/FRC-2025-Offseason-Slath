@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.Elevator;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -7,6 +8,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ElevatorIOSim implements ElevatorIO {
     private final PIDController pidController = new PIDController(0, 0, 0);
+    private final ElevatorFeedforward feedforwardController = new ElevatorFeedforward(0, 0, 0, 0);
     private double appliedVolts = 0.0;
     private double goalInches = 0.0;
 
@@ -23,6 +25,14 @@ public class ElevatorIOSim implements ElevatorIO {
         pidController.setP(p);
         pidController.setI(i);
         pidController.setD(d);
+    }
+
+    @Override
+    public void setFeedforward(double s, double g, double v, double a) {
+        feedforwardController.setKs(s);
+        feedforwardController.setKg(g);
+        feedforwardController.setKv(v);
+        feedforwardController.setKa(a);
     }
 
     @Override
