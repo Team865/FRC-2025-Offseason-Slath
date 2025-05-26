@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ElevatorIOSim implements ElevatorIO {
     private final ProfiledPIDController pidController =
-            new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(10, 5));
+            new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(30, 15));
     private final ElevatorFeedforward feedforwardController = new ElevatorFeedforward(0, 0, 0, 0);
     private double appliedVolts = 0.0;
     private double goalInches = 0.0;
