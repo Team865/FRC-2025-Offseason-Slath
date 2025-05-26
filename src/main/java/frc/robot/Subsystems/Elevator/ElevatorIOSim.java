@@ -40,6 +40,7 @@ public class ElevatorIOSim implements ElevatorIO {
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
         appliedVolts = pidController.calculate(inputs.positionInches, goalInches);
+        appliedVolts += feedforwardController.calculate(pidController.getSetpoint().velocity);
         elevatorSim.setInputVoltage(appliedVolts);
         elevatorSim.update(0.02);
 
