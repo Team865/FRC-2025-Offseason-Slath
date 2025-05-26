@@ -12,8 +12,8 @@ import frc.robot.util.PhoenixUtil;
 
 public class RollersIOTalonFX implements RollersIO {
     private final TalonFX motor = new TalonFX(ROLLERS_ID);
-    private final StatusSignal<Voltage> appliedVolts = motor.getMotorVoltage();
 
+    private final StatusSignal<Voltage> appliedVolts = motor.getMotorVoltage();
     private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
     public RollersIOTalonFX() {
