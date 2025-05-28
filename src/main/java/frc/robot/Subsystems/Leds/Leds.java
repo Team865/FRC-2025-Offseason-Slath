@@ -51,7 +51,12 @@ public class Leds extends SubsystemBase {
 
     public enum LEDState {
         INTAKING,
-        SHOOTING,
+        OUTTAKING,
+        HOLDING,
+        L1,
+        L2,
+        L3,
+        L4,
         CLIMBING
     }
 
