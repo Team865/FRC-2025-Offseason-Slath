@@ -28,6 +28,10 @@ public final class ElevatorConstants {
 
     public static record FeedforwardGains(double kS, double kG, double kV, double kA) {}
 
-    public static final PIDGains pidGains = new PIDGains(0, 0, 0);
-    public static final FeedforwardGains feedforwardGains = new FeedforwardGains(0, 0, 0, 0);
+    public static record MotionProfile(double cruiseVelocity, double acceleration, double jerk) {}
+    ;
+
+    public static final PIDGains pidGains = new PIDGains(100, 0, 0);
+    public static final FeedforwardGains feedforwardGains = new FeedforwardGains(0.24, 0.56, 4.44, 0.07);
+    public static final MotionProfile motionProfile = new MotionProfile(80, 200, 200);
 }

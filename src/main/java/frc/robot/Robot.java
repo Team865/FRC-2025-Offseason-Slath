@@ -20,6 +20,7 @@ import frc.robot.Subsystems.Elevator.Elevator;
 import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
 import frc.robot.Subsystems.Elevator.ElevatorIO;
 import frc.robot.Subsystems.Elevator.ElevatorIOSim;
+import frc.robot.Subsystems.Elevator.ElevatorIOTalonFX;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.DetectionIOLaserCan;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
@@ -80,7 +81,7 @@ public class Robot extends LoggedRobot {
                         new DetectionIOLaserCan(IntakeConstants.MIDDLE_SENSOR_ID),
                         new DetectionIOLaserCan(IntakeConstants.BOTTOM_SENSOR_ID));
 
-                elevatorSubsystem = new Elevator(new ElevatorIO() {});
+                elevatorSubsystem = new Elevator(new ElevatorIOTalonFX());
                 break;
 
             case SIM:

@@ -27,12 +27,20 @@ public class Elevator extends SubsystemBase {
     private final LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/Feedforward/kV", feedforwardGains.kV());
     private final LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/Feedforward/kA", feedforwardGains.kA());
 
+    private final LoggedTunableNumber profileVelocity =
+            new LoggedTunableNumber("Elevator/MotionProfile/Velocity", motionProfile.cruiseVelocity());
+    private final LoggedTunableNumber profileAcceleration =
+            new LoggedTunableNumber("Elevator/MotionProfile/Acceleration", motionProfile.acceleration());
+    private final LoggedTunableNumber profileJerk =
+            new LoggedTunableNumber("Elevator/MotionProfile/Jerk", motionProfile.jerk());
+
     /** Creates a new Elevator. */
     public Elevator(ElevatorIO elevatorIO) {
         this.elevatorIO = elevatorIO;
 
         elevatorIO.setPID(kP.get(), kI.get(), kD.get());
         elevatorIO.setFeedforward(kS.get(), kG.get(), kV.get(), kA.get());
+        elevatorIO.setMotionProfile(profileVelocity.get(), profileAcceleration.get(), profileJerk.get());
     }
 
     @Override
@@ -57,6 +65,15 @@ public class Elevator extends SubsystemBase {
                 kG,
                 kV,
                 kA);
+
+        LoggedTunableNumber.ifChanged(
+                hashCode(),
+                () -> {
+                    elevatorIO.setMotionProfile(profileVelocity.get(), profileAcceleration.get(), profileJerk.get());
+                },
+                profileVelocity,
+                profileAcceleration,
+                profileJerk);
 
         Logger.processInputs("Elevator", elevatorInputs);
     }

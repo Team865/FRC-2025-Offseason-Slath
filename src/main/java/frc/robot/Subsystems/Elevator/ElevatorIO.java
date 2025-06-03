@@ -18,6 +18,8 @@ public interface ElevatorIO {
 
     public default void setFeedforward(double s, double g, double v, double a) {}
 
+    public default void setMotionProfile(double velocity, double acceleration, double jerk) {}
+
     public default void setGoal(double goal) {}
 
     public default void updateInputs(ElevatorIOInputs inputs) {}

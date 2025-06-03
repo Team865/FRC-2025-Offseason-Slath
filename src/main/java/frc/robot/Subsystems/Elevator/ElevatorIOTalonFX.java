@@ -32,6 +32,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private final StatusSignal<Current> supplyCurrent = mainTalon.getSupplyCurrent();
     private final StatusSignal<Current> statorCurrent = mainTalon.getStatorCurrent();
 
+    private double goal;
+
     // These are in inches, not rotations
     private final StatusSignal<Angle> position = mainTalon.getPosition();
     private final StatusSignal<AngularVelocity> velocity = mainTalon.getVelocity();
@@ -74,7 +76,22 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     }
 
     @Override
+    public void setMotionProfile(double velocity, double acceleration, double jerk) {
+        var motionMagic = talonConfig.MotionMagic;
+
+        motionMagic.MotionMagicCruiseVelocity = velocity;
+        motionMagic.MotionMagicAcceleration = acceleration;
+        motionMagic.MotionMagicJerk = jerk;
+
+        System.out.printf("Velocity: %s, Accel: %s, Jerk: %s", velocity, acceleration, jerk);
+
+        PhoenixUtil.tryUntilOk(5, () -> mainTalon.getConfigurator().apply(talonConfig));
+        PhoenixUtil.tryUntilOk(5, () -> followerTalon.getConfigurator().apply(talonConfig));
+    }
+
+    @Override
     public void setGoal(double goal) {
+        this.goal = goal;
         mainTalon.setControl(motionRequest.withPosition(goal));
     }
 
@@ -82,6 +99,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public void updateInputs(ElevatorIOInputs inputs) {
         BaseStatusSignal.refreshAll(appliedVolts);
 
+        inputs.setpointInches = goal;
         inputs.appliedVolts = appliedVolts.getValueAsDouble();
         inputs.supplyCurrent = supplyCurrent.getValueAsDouble();
         inputs.statorCurrent = statorCurrent.getValueAsDouble();
