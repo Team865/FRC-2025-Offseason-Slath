@@ -16,6 +16,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Elevator.Elevator;
+import frc.robot.Subsystems.Elevator.ElevatorConstants.ReefLevel;
+import frc.robot.Subsystems.Elevator.ElevatorIO;
+import frc.robot.Subsystems.Elevator.ElevatorIOSim;
+import frc.robot.Subsystems.Elevator.ElevatorIOTalonFX;
 import frc.robot.Subsystems.Intake.DetectionIO;
 import frc.robot.Subsystems.Intake.DetectionIOLaserCan;
 import frc.robot.Subsystems.Intake.DetectionIOSim;
@@ -41,7 +46,10 @@ public class Robot extends LoggedRobot {
     private Command autonomousCommand;
 
     private final Intake intakeSubsystem;
+    private final Elevator elevatorSubsystem;
+
     private final CommandXboxController driverController = new CommandXboxController(0);
+    private final CommandXboxController operatorController = new CommandXboxController(1);
 
     public Robot() {
         // Record metadata
@@ -72,13 +80,16 @@ public class Robot extends LoggedRobot {
                         new RollersIOTalonFX(),
                         new DetectionIOLaserCan(IntakeConstants.MIDDLE_SENSOR_ID),
                         new DetectionIOLaserCan(IntakeConstants.BOTTOM_SENSOR_ID));
+
+                elevatorSubsystem = new Elevator(new ElevatorIOTalonFX());
                 break;
 
             case SIM:
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(new NT4Publisher());
 
-                intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIOSim() {}, new DetectionIOSim() {});
+                intakeSubsystem = new Intake(new RollersIOSim(), new DetectionIOSim(), new DetectionIOSim());
+                elevatorSubsystem = new Elevator(new ElevatorIOSim());
                 break;
 
             default:
@@ -89,16 +100,26 @@ public class Robot extends LoggedRobot {
                 Logger.setReplaySource(new WPILOGReader(logPath));
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 intakeSubsystem = new Intake(new RollersIO() {}, new DetectionIO() {}, new DetectionIO() {});
+                elevatorSubsystem = new Elevator(new ElevatorIO() {});
                 break;
         }
 
         // Start AdvantageKit logger
         Logger.start();
 
-        driverController.a().whileTrue(intakeSubsystem.runRollers());
-        driverController.b().onTrue(intakeSubsystem.intake());
+        driverController.y().onTrue(intakeSubsystem.intake());
         driverController.x().onTrue(intakeSubsystem.outakeBottom());
-        driverController.y().onTrue(intakeSubsystem.outakeTop());
+        driverController.b().onTrue(intakeSubsystem.outakeTop());
+
+        driverController.rightTrigger().onTrue(elevatorSubsystem.extend());
+
+        driverController.a().onTrue(intakeSubsystem.cancel());
+        driverController.a().onTrue(elevatorSubsystem.retract());
+
+        operatorController.a().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L1));
+        operatorController.b().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L2));
+        operatorController.x().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L3));
+        operatorController.y().onTrue(elevatorSubsystem.setReefLevel(ReefLevel.L4));
     }
 
     /** This function is called periodically during all modes. */

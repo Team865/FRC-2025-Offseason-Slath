@@ -33,6 +33,9 @@ public class Intake extends SubsystemBase {
     private final LoggedTunableNumber COMBINED_SENSOR_THRESHOLD_TUNABLE =
             new LoggedTunableNumber("Intake/CombinedSensorThresholdMM", COMBINED_MAX_DIST_MM);
 
+    @AutoLogOutput(key = "Intake/isRunning")
+    private boolean running = false;
+
     /** Creates a new Intake subsystem.
      * @see #intake()
      * @see #outakeBottom()
@@ -81,11 +84,11 @@ public class Intake extends SubsystemBase {
     public Command runRollers(double volts) {
         return this.startEnd(
                 () -> {
-                    System.out.println("RUNNING ROLLERS");
+                    running = true;
                     rollersIO.setVoltage(volts);
                 },
                 () -> {
-                    System.out.println("STOPPING ROLLERS");
+                    running = false;
                     rollersIO.setVoltage(0.0);
                 });
     }
@@ -98,8 +101,16 @@ public class Intake extends SubsystemBase {
         return this.runRollers(intakingVoltage);
     }
 
-    @AutoLogOutput
+    /** Stops the rollers. Effectively cancels any intake or outake that is happening */
+    public Command cancel() {
+        return this.runOnce(() -> running = false);
+    }
+
     // Logical methods
+    public Trigger isRunning() {
+        return new Trigger(() -> running);
+    }
+
     public Trigger middleSensorIsDetecting() {
         return new Trigger(() -> middleSensorInputs.distanceMM <= MIDDLE_SENSOR_THRESHOLD_TUNABLE.get());
     }
@@ -113,7 +124,6 @@ public class Intake extends SubsystemBase {
                 <= COMBINED_SENSOR_THRESHOLD_TUNABLE.get());
     }
 
-    @AutoLogOutput
     public Trigger bottomSensorIsDetecting() {
         return new Trigger(() -> bottomSensorInputs.distanceMM <= BOTTOM_SENSOR_THRESHOLD_TUNABLE.get());
     }
@@ -175,7 +185,8 @@ public class Intake extends SubsystemBase {
                 Robot.isSimulation() ? this.intakeSensorSimulation() : Commands.none()
                 // Run rollers until both sensors detect the coral
                 )
-                .alongWith(this.runRollers().until(bothSensorsAreDetecting()));
+                .alongWith(this.runRollers()
+                        .until(bothSensorsAreDetecting().or(isRunning().negate())));
     }
 
     /** Command to outake the coral out the bottom.
@@ -190,7 +201,8 @@ public class Intake extends SubsystemBase {
                 Robot.isSimulation() ? this.outakeSensorSimulation() : Commands.none()
                 // Run rollers until the bottom sensor no longer detects the coral
                 )
-                .alongWith(this.runRollers().until(bottomSensorIsDetecting().negate()));
+                .alongWith(this.runRollers()
+                        .until(bottomSensorIsDetecting().negate().or(isRunning().negate())));
     }
 
     /** Command to outake the coral out the top.
@@ -206,6 +218,6 @@ public class Intake extends SubsystemBase {
                 // Run rollers in inverse until the middle sensor no longer detects the coral
                 )
                 .alongWith(this.runRollers(-intakingVoltage)
-                        .until(middleSensorIsDetecting().negate()));
+                        .until(middleSensorIsDetecting().negate().or(isRunning().negate())));
     }
 }
