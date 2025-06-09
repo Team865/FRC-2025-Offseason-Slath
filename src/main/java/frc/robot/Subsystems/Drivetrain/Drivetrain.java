@@ -7,7 +7,7 @@ package frc.robot.Subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
-    /** Creates a new Drivetrain. */
+    /** Creates a new Swerve drivetrain. */
     public Drivetrain() {}
 
     @Override
