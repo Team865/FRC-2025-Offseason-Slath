@@ -1,3 +1,6 @@
+# THIS REPO WAS AN OFFSEASON PROJECT FOR PRACTICE
+
+# Old instructions
 # Guidelines
 - All changes should be developed on a separate branch and have pr opened while being developed.
 - All features should have a corresponding issue and be tracked in the github project.
